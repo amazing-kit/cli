@@ -1,0 +1,46 @@
+{
+  "": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      // A workspace's  task depends on that workspace's
+      // topological dependencies' and devDependencies'
+      //  tasks  being completed first. The  symbol
+      // indicates an upstream dependency.
+      "dependsOn": ["^build"],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "test/**/*.tsx"],
+      "outputs": ["build/**", "dist/**"]
+    },
+    "build:watch": {
+      // A workspace's  task depends on that workspace's
+      // topological dependencies' and devDependencies'
+      //  tasks  being completed first. The  symbol
+      // indicates an upstream dependency.
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true,
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "test/**/*.tsx"],
+      "outputs": ["build/**", "dist/**"]
+    },
+    "deploy": {
+      // A workspace's  task depends on the ,
+      // , and  tasks of the same workspace
+      // being completed.
+      "dependsOn": ["build", "test", "lint"]
+    },
+    "test": {
+      // A workspace's  task depends on that workspace's
+      // own  task being completed first.
+      "dependsOn": ["build"],
+      // A workspace's  task should only be rerun when
+      // either a  or  file has changed.
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "test/**/*.tsx"]
+    },
+    // A workspace's  task has no dependencies and
+    // can be run whenever.
+    "lint": {},
+    "start:watch": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
