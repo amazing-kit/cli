@@ -1,0 +1,30 @@
+{
+  "name": "{{npm_name}}",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && vite build",
+    "build:watch": "run-p build:watch:*",
+    "build:watch:vite": "vite build --watch",
+    "build:watch:tsc": "tsc --watch",
+    "clean": "rimraf dist .turbo node_modules"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.4"
+  }
+}

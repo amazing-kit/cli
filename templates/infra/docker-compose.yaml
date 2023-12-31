@@ -1,0 +1,98 @@
+# clean
+# docker compose down && rm -fR db-entities/
+
+# address of the host: host.docker.internal
+
+# start
+# cd infra
+# docker compose --env-file ../.env up
+
+# .env sample file :
+
+# POSTGRES_USER=root
+# POSTGRES_PASSWORD=secret
+
+version: '3'
+services:
+  {{#if isPostgresEnabled}}
+  postgres:
+    env_file:
+      - ../.env
+    image: postgres
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d" ]
+      interval: 10s
+      timeout: 60s
+      retries: 5
+  {{/if}}
+
+  {{#if isKeyDBEnabled}}
+  keydb:
+    env_file:
+      - ../.env
+    image: eqalpha/keydb
+    container_name: keydb
+    ports:
+      - "6379:6379"
+    restart: always
+  {{/if}}
+
+  {{#if isMinioEnabled}}
+  # https://sanidhya235.medium.com/introduction-to-minio-193e8523a4a8
+  minio:
+    env_file:
+      - ../.env
+    image: quay.io/minio/minio
+    container_name: minio
+    command: minio server /data
+    volumes:
+      - ./minio-data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+  {{/if}}
+
+  {{#if isNatsEnabled}}
+  nats:
+    env_file:
+      - ../.env
+    image: nats
+    container_name: nats
+    command: [ "-js" ]
+    ports:
+      - "4222:4222"
+      - "6222:6222"
+      - "8222:8222"
+    restart: always
+  {{/if}}
+
+  {{#if isNginxEnabled}}
+  nginx:
+    env_file:
+      - ../.env
+    image: nginx
+    container_name: web_proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/config.d:/etc/nginx/config.d
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+      {{#if certificate_path}}
+      - {{certificate_path}}:/etc/nginx/certs
+      {{/if}}
+    environment:
+      - DOCKER_HOST_IP=${DOCKER_HOST_IP}
+  {{/if}}
+

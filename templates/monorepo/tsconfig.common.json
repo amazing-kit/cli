@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es5",
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "noErrorTruncation": false,
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}

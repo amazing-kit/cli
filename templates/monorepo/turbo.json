@@ -1,5 +1,6 @@
 {
   "": "https://turbo.build/schema.json",
+  "globalDotEnv": [".env"],
   "pipeline": {
     "build": {
       // A workspace's  task depends on that workspace's

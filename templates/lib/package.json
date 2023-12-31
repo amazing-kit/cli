@@ -1,5 +1,5 @@
 {
-  "name": "@{{scope_name}}/{{lib_name}}",
+  "name": "{{npm_name}}",
   "version": "1.0.0",
   "description": "",
   "private": true,
